@@ -8,6 +8,8 @@ function Dashboard() {
     totalVideos: 0,
     totalSlots: 0,
     totalUsers: 0,
+    recentVideos: [],
+    recentUsers: [],
   });
 
   useEffect(() => {
@@ -24,7 +26,7 @@ function Dashboard() {
   };
 
   return (
-    <div>
+    <div className="space-y-8">
       {/* Header */}
       <div>
         <h1 className="text-4xl font-bold text-[#5C4033]">
@@ -38,7 +40,7 @@ function Dashboard() {
       </div>
 
       {/* Stats */}
-      <div className="grid md:grid-cols-4 gap-6 mt-10">
+      <div className="grid md:grid-cols-4 gap-6">
         <StatCard
           title="Total Appointments"
           value={stats.totalAppointments}
@@ -64,13 +66,86 @@ function Dashboard() {
         />
       </div>
 
-      <p>✅ New user registered</p>
+      {/* Dashboard Content */}
+      <div className="grid lg:grid-cols-2 gap-8">
+        {/* Recent Videos */}
+        <div className="bg-white rounded-3xl shadow-md border border-gray-200 p-6">
+          <h2 className="text-2xl font-bold text-[#5C4033] mb-5">
+            🎬 Recent Videos
+          </h2>
 
-      <p>📅 Appointment booked</p>
+          {stats.recentVideos?.length > 0 ? (
+            <div className="space-y-4">
+              {stats.recentVideos.map((video) => (
+                <div
+                  key={video._id}
+                  className="flex items-center justify-between border-b pb-3"
+                >
+                  <div>
+                    <h3 className="font-semibold text-[#5C4033]">
+                      {video.title}
+                    </h3>
 
-      <p>🎬 Video module updated</p>
+                    <p className="text-sm text-gray-500">{video.category}</p>
+                  </div>
 
-      <p>👤 User module completed</p>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      video.status === "Completed"
+                        ? "bg-green-100 text-green-700"
+                        : video.status === "Editing"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {video.status}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-400">No videos available.</p>
+          )}
+        </div>
+
+        {/* Registered Users */}
+        <div className="bg-white rounded-3xl shadow-md border border-gray-200 p-6">
+          <h2 className="text-2xl font-bold text-[#5C4033] mb-5">
+            👥 Registered Users
+          </h2>
+
+          {stats.recentUsers?.length > 0 ? (
+            <div className="space-y-4">
+              {stats.recentUsers.map((user) => (
+                <div
+                  key={user._id}
+                  className="flex items-center justify-between border-b pb-3"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-[#708238] text-white flex items-center justify-center font-bold text-lg">
+                      {user.name?.charAt(0).toUpperCase()}
+                    </div>
+
+                    <div>
+                      <h3 className="font-semibold text-[#5C4033]">
+                        {user.name}
+                      </h3>
+
+                      <p className="text-sm text-gray-500">{user.email}</p>
+                    </div>
+                  </div>
+
+                  <span className="text-xs px-3 py-1 rounded-full bg-[#EFE6DD] text-[#5C4033] capitalize">
+                    {user.role}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-400">No users found.</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
