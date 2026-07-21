@@ -40,7 +40,15 @@ function Login() {
         navigate("/user/dashboard");
       }
     } catch (err) {
-      toast.error(err.response?.data?.message || "Login Failed");
+      console.log("FULL ERROR:", err);
+      console.log("STATUS:", err.response?.status);
+      console.log("DATA:", err.response?.data);
+
+      alert(
+        JSON.stringify(err.response?.data || err.message || "Unknown Error"),
+      );
+
+      toast.error(err.response?.data?.message || err.message || "Login Failed");
     } finally {
       setLoading(false);
     }
